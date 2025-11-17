@@ -1,4 +1,4 @@
-langchain==0.0.189
+langchain==0.2.5
 chromadb==0.3.25
 openai==0.27.6
 pytesseract==0.3.10
