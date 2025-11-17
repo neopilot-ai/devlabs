@@ -39,14 +39,6 @@
 			"component": "dify_advanced_build_rag_agent"
 		},
 		{
-			"title": "NLP SQL Chatbot in Dify using OpenSource model",
-			"description": "Build a chatbot that answers questions for tabular data in Dify using open-souce LLM model",
-			"usage_docs_url": "https://www.notion.so/neopilot/NLP-SQL-Chatbot-in-Dify-using-OpenSource-model-25b634bb4fee404488b358406c5d4d81",
-			"preview_image_url": "https://github.com/user-attachments/assets/37c97a2f-2560-4faf-9d3f-b7ed900c77c0",
-			"tutorial_id": "nlp_sql_chatbot_in_dify_using_open_source_models_25b634bb4fee404488b358406c5d4d81",
-			"component": "dify_nlpsql_agent"
-		},
-		{
 			"title": "Create a Container Image",
 			"description": "Build a container image for development and workloads on Neopilot Platform",
 			"video_url": "https://github.com/user-attachments/assets/5e774d68-c2bb-4078-b1af-18a301a5d08a",
