@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Translate pkg's Apple codesign usage to rcodesign call:
+#   codesign -f --sign - /app/lsp/bin/neopilot-lsp-macos-arm64
+if [[ "-f --sign -" = "$1 $2 $3" ]] && [[ -n "${executable:=$4}" ]]; then
+  set -e
+
+  if [[ -n "$APPLE_DEVELOPER_ID_CERTIFICATE_PASSWORD" ]] && [[ -n "$APPLE_DEVELOPER_ID_CERTIFICATE_PEM" ]]; then
+    export RCODESIGN_SIGN_SIGNER_P12_PASSWORD="${APPLE_DEVELOPER_ID_CERTIFICATE_PASSWORD}"
+    export RCODESIGN_SIGN_SIGNER_P12_PATH="${APPLE_DEVELOPER_ID_CERTIFICATE_PEM/.pem$/.p12/}"
+
+    # Convert the PEM public/private key pair into a P12 certificate.
+    openssl pkcs12 -legacy -export \
+      -inkey "$APPLE_DEVELOPER_ID_CERTIFICATE_PEM" \
+      -in "$APPLE_DEVELOPER_ID_CERTIFICATE_PEM" \
+      -out "$RCODESIGN_SIGN_SIGNER_P12_PATH" \
+      -passin "pass:$APPLE_DEVELOPER_ID_CERTIFICATE_PASSWORD" \
+      -passout "pass:$RCODESIGN_SIGN_SIGNER_P12_PASSWORD"
+  fi
+
+  # Sign the single executable application with a hardened runtime and required entitlements.
+  rcodesign sign "${executable}" \
+    --code-signature-flags runtime \
+    --entitlements-xml-file /opt/neopilot-codesigning/macos-entitlements.xml
+
+  if [[ -n "${APPSTORE_CONNECT_API_KEY_FILE}" ]]; then
+    # Zip the executable for submission to Apple's Notary service.
+    zip ${executable}.zip ${executable}
+
+    # Submit the signed executable for notarization.
+    rcodesign notary-submit --api-key-file "${APPSTORE_CONNECT_API_KEY_FILE}" --wait ${executable}.zip
+  fi
+else
+  set -e
+  rcodesign $@
+fi
