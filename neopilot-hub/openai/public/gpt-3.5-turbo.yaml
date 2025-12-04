@@ -1,0 +1,16 @@
+name: OpenAI GPT-3.5 Turbo
+version: 1.0.1
+schema: v1
+
+models:
+  - name: OpenAI GPT-3.5 Turbo
+    provider: openai
+    model: gpt-3.5-turbo
+    apiKey: ${{ inputs.OPENAI_API_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 16385
+      maxTokens: 4096
