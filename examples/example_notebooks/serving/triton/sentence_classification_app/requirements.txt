@@ -2,6 +2,6 @@ fastapi==0.68.1
 Flask==2.0.1
 geventhttpclient==1.4.4
 gevent==21.1.2
-transformers==4.9.2
+transformers==5.0.0rc3
 tritonclient==2.12.0
 torch==2.8.0
